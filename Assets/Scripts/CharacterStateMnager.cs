@@ -30,5 +30,6 @@ public class CharacterStateMnager : MonoBehaviour
                 break;
             // and so on...
         }
+        return true;
     }
 }
