@@ -2,11 +2,31 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    // IMPORTANT: 얘는 게임 scene에 오로지 하나만 존재해야 합니다!!
-
-    public void Update(){
-        // write almost all game logic here.
-        // ex) handle the events.
+    public static GameManager instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = new GameManager();
+            }
+            return _instance;
+        }; private set;
     }
-    
+    private static GameManager _instance = null;
+
+
+
+    private void Awake()
+    {
+        if (_instance == null)
+        {
+            _instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+    }
+
 }
