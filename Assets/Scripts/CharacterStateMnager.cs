@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CharacterStateMnager
+public class CharacterStateMnager : MonoBehaviour
 {
     public enum States
     {
@@ -13,10 +13,12 @@ public class CharacterStateMnager
     private States state = Idle;
 
     public States getState(){
-        return state
+        return state;
     }
 
-    public void setState(States state){
+    public bool setState(States state){
+        // set the character's state.
+        // return true if the state is changed succesfully, otherwise false.
         switch (state){
             case == Walking:
                 // write code here
