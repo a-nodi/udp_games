@@ -10,7 +10,7 @@ public class CharacterStateMnager : MonoBehaviour
         Jumping
     }
 
-    private States state = States.Idle;
+    private States state = States.Walking;
 
     public States getState(){
         return state;
