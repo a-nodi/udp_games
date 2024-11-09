@@ -10,6 +10,8 @@ public class CharacterStateMnager : MonoBehaviour
         Jumping
     }
 
+    public Animator animator;
+
     private States state = States.Walking;
 
     public States getState(){
@@ -31,5 +33,9 @@ public class CharacterStateMnager : MonoBehaviour
             // and so on...
         }
         return true;
+    }
+
+    public void setAnimatorState(States state){
+        // 박예찬이 짤거
     }
 }
