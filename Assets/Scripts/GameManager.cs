@@ -176,7 +176,7 @@ public class GameManager : MonoBehaviour, IListener
         {
             Destroy(dictOfOasis[id]);
             dictOfOasis.Remove(id);
-            EventManager.instance.RemoveListener(EVENT_TYPE.CLICK_OASIS, dictOfOasis[id].GetComponent<Oasis>());
+            //EventManager.instance.RemoveListener(EVENT_TYPE.CLICK_OASIS, dictOfOasis[id].GetComponent<Oasis>());
         }
     }
 
