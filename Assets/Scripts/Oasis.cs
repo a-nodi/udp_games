@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 public class Oasis : MonoBehaviour, IListener
 {
@@ -11,10 +12,10 @@ public class Oasis : MonoBehaviour, IListener
 
     void OnMouseDown()
     {
-        EventManager.instance.PostNotification(EVENT_TYPE.CLICK_OASIS, this, this.transform.position.x);
+        EventManager.instance.PostNotification(EVENT_TYPE.CLICK_OASIS, this, transform.position.x);
     }
 
-    void OnEvent(EVENT_TYPE eventType, Component sender, object param = null)
+    public void OnEvent(EVENT_TYPE eventType, Component sender, object param = null)
     {
         switch (eventType)
         {

@@ -1,11 +1,13 @@
 using UnityEngine;
+using System;
+using System.Collections.Generic;
 
 public class IdDistancePair : IComparable<IdDistancePair>
 {
     public string Id { get; set; }
-    public int Distance { get; set; }
+    public float Distance { get; set; }
 
-    public IdDistancePair(string id, int distance)
+    public IdDistancePair(string id, float distance)
     {
         Id = id;
         Distance = distance;
