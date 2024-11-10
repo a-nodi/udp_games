@@ -17,15 +17,19 @@ public class GameManager : MonoBehaviour, IListener
         }
     }
 
-    private score = 0.0f;
+    private int score = 0.0f;
 
     // TODO: Def priority queue (min heap) for closestOasisId
     public MinHeap<IdDistancePair> priorityQueue = new MinHeap<IdDistancePair>();
     private int distanceCoefficient = 10; // TODO: Hyperparameter
 
+    public chracterStateManager characterStateManager;
+
     public float speed = 0.0f;
 
     public int MIN_DISTANCE = 5;
+
+    public float FOUND_DISTANCE = 6.0f;
 
     public GameObject OasisPrefab;
 
@@ -55,6 +59,23 @@ public class GameManager : MonoBehaviour, IListener
         else
         {
             Destroy(this);
+        }
+    }
+
+    void Update()
+    {
+
+        float closestOasisX = dictOfOasis[closestOasisId].GetComponent<Oasis>().transform.position.x;
+        float characterX = characterStateManager.instance.transform.position.x;
+
+        if (closestOasisX - characterX <= characterStateManager.instance.JUMP_LENGTH)
+        {
+            EventManager.instance.PostNotification(EVENT_TYPE.ADD_OASIS, this);
+        }
+
+        if (closestOasisX - characterX <= FOUND_DISTANCE)
+        {
+            EventManager.instance.PostNotification(EVENT_TYPE.FOUND, this, closestOasisId);
         }
     }
 
