@@ -1,4 +1,6 @@
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class CharacterStateMnager : MonoBehaviour
 {
@@ -7,17 +9,20 @@ public class CharacterStateMnager : MonoBehaviour
         Walking,
         Running,
         Found,
-        Jumping
+        Jumping,
+        Crash
     }
 
-    public Animator animator;
+    private Animator animator;
     public float CharacterSpeed = 2.0f;
     private float timer = 0f; // 경과 시간 추적용 타이머
     private float waitTimer = 0f; // Running 상태로 전환 후 대기 시간
-    private bool isWaiting = false; // 대기 중인지 여부
-    private bool hasStartedRunning = false; // Running 시작 여부 추적
 
     private States state = States.Walking;
+
+    public const float WALKING_SPEED = 2.0f;
+    public const float RUNNING_SPEED = 10.0f;
+    public const float WAIT_TIME = 1.0f;
 
     public States getState()
     {
@@ -32,17 +37,20 @@ public class CharacterStateMnager : MonoBehaviour
             switch (newState)
             {
                 case States.Walking:
-                    animator.SetBool("find", false);
-                    CharacterSpeed = 2.0f;
+                    CharacterSpeed = WALKING_SPEED;
+                    break;
+                case States.Found:
+                    CharacterSpeed = 0f; // 1초 동안 멈춤
+                    waitTimer = 0f;  // 대기 타이머 초기화
                     break;
                 case States.Running:
-                    animator.SetBool("find", true);
-                    isWaiting = true; // 대기 시작
-                    waitTimer = 0f;  // 대기 타이머 초기화
-                    hasStartedRunning = true; // Running 시작됨
+                    CharacterSpeed = RUNNING_SPEED; 
                     break;
+                
+
                 // 다른 상태들
             }
+            setAnimationState(newState);
             state = newState;
             return true; // 상태가 성공적으로 변경됨
         }
@@ -54,32 +62,44 @@ public class CharacterStateMnager : MonoBehaviour
         transform.localScale = new Vector3(1, 1, 1); // 캐릭터 크기 설정
         transform.localPosition = new Vector3(-6, -1, -10); // 초기 위치 설정
         setState(States.Walking); // 기본 상태는 Walking
+
+        animator = transform.GetComponent<Animator>();
     }
 
     void Update()
     {
-        
-
-        // Running 상태로 전환된 후 1초 동안 멈추기
-        if (state == States.Running) // Running 상태일 때만
+        if (state == States.Found)
         {
-            if (isWaiting)
-            {
-                waitTimer += Time.deltaTime; // 대기 시간 누적
-
-                if (waitTimer >= 1f) // 1초가 경과하면
-                {
-                    CharacterSpeed = 10f; // 속도 10f로 변경
-                    isWaiting = false; // 대기 종료
-                    waitTimer = 0f; // 대기 타이머 초기화
-                }
-                else
-                {
-                    CharacterSpeed = 0f; // 1초 동안 멈춤
-                }
+            waitTimer += Time.deltaTime; // 대기 시간 누적
+            if (waitTimer>=WAIT_TIME){
+                setState(States.Running);
             }
         }
 
         transform.position += Vector3.right * CharacterSpeed * Time.deltaTime;
+    }
+
+    private void setAnimationState(States newState){
+        switch (newState)
+        {
+            case States.Walking:
+                animator.SetBool("find",false);
+                break;
+            case States.Found:
+                animator.SetBool("find",true);
+                break;
+            case States.Running:
+                // do nothing
+                break;
+            case States.Jumping:
+                animator.SetBool("find", true);
+                animator.SetBool("near", true);
+                break;
+            case States.Crash:
+                animator.SetBool("find", false);
+                animator.SetBool("near", false);
+                animator.SetBool("landGround", true);
+                break;
+        }
     }
 }
