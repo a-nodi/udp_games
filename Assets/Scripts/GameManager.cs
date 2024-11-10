@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour, IListener
 {
@@ -36,6 +36,8 @@ public class GameManager : MonoBehaviour, IListener
     float targetOasisX = 0.0f;
     public GameObject OasisPrefab;
 
+    private int currentSceneIndex;
+
     public static GameManager instance
     {
         get
@@ -65,13 +67,33 @@ public class GameManager : MonoBehaviour, IListener
         }
     }
 
+    void Start()
+    {
+        currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
+
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        currentSceneIndex = scene.buildIndex;
+    }
+
     void Update()
     {
-
-        if (characterStateManager == null)
+        switch (currentSceneIndex)
         {
-            return;
+            case 1:
+                UpdateCharacterState();
+                break;
+            default:
+                break;
         }
+    }
+
+    public void UpdateCharacterState()
+    {
         float closestOasisX = dictOfOasis[closestOasisId].GetComponent<Oasis>().transform.position.x;
         float characterX = characterStateManager.transform.position.x;
 
