@@ -1,4 +1,7 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+
 
 public class GameManager : MonoBehaviour, IListener
 {
@@ -25,7 +28,8 @@ public class GameManager : MonoBehaviour, IListener
                 _instance = new GameManager();
             }
             return _instance;
-        }; private set;
+        }
+        private set;
     }
     private static GameManager _instance = null;
 
