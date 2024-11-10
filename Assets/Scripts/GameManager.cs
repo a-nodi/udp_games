@@ -110,4 +110,27 @@ public class GameManager : MonoBehaviour, IListener
         float randomDistance = Random.Range(0.0f, 1.0f) * _speed * distanceCoefficient;
         return randomDistance < MIN_DISTANCE ? MIN_DISTANCE : randomDistance;
     }
+
+    public float scoreFuntion(float distance)
+    {
+        if (distance < 0)
+        {
+            return 0.0f;
+        }
+
+        else if (distance < 0.1)
+        {
+            return 100.0f;
+        }
+
+        else if (distance < 10)
+        {
+            return 10.0f / distance;
+        }
+
+        else
+        {
+            return 0.0f;
+        }
+    }
 }
