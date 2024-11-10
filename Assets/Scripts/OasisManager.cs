@@ -47,22 +47,18 @@ public class OasisManager : MonoBehaviour
         );
 
         // 거리가 1 이하이고 캐릭터보다 뒤에 있을 때 오아시스 이동 및 Walking 상태 전환
-        if (distance <= 1f && oasis.transform.position.x < character.transform.position.x)
+        if (distance <= characterStateManager.JUMP_LENGTH && oasis.transform.position.x > character.transform.position.x)
         {
-            RandomizeOasis(oasis);
-            characterStateManager.setState(CharacterStateManager.States.Walking);
+            characterStateManager.setState(CharacterStateManager.States.Jumping);
         }
+        //if (distance == 0 && oasis.)
         else if (distance < FoundDistance && characterStateManager.getState() != CharacterStateManager.States.Running)
         {
             // 감지 거리 내에 있을 때 Running 상태로 전환
-            characterStateManager.setState(CharacterStateManager.States.Running);
+            characterStateManager.setState(CharacterStateManager.States.Found);
         }
 
-        // 음수 좌표일 경우 100 이상 양수 좌표로 강제 이동
-        if (oasis.transform.position.x < 0)
-        {
-            oasis.transform.position = new Vector3(100 + Mathf.Abs(oasis.transform.position.x), -1, -5);
-        }
+        
     }
 
     // 오아시스를 캐릭터 뒤쪽으로 이동시키기
@@ -73,7 +69,7 @@ public class OasisManager : MonoBehaviour
             float randomX = Random.Range(100, 300); // 100~300 사이의 랜덤 X 좌표
 
             // 캐릭터 위치를 기준으로 뒤쪽에 배치하고 z를 -5로 고정
-            oasis.transform.position = new Vector3(character.transform.position.x - randomX, -1, -5);
+            oasis.transform.position = new Vector3(character.transform.position.x + randomX, -1, -5);
         }
     }
 
