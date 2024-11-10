@@ -19,7 +19,7 @@ public class EventManager : MonoBehaviour
         }
     }
 
-    void AddListener(EVENT_TYPE eventType, IListener listener)
+    public void AddListener(EVENT_TYPE eventType, IListener listener)
     {
         List<IListener> listenerList = null;
         if (Listeners.TryGetValue(eventType, out listenerList))
@@ -31,7 +31,7 @@ public class EventManager : MonoBehaviour
         listenerList.Add(listener);
     }
 
-    void PostNotification(EVENT_TYPE eventType, Component sender, object param = null)
+    public void PostNotification(EVENT_TYPE eventType, Component sender, object param = null)
     {
         List<IListener> listenerList = null;
         if (!Listeners.TryGetValue(eventType, out listenerList))
@@ -48,7 +48,7 @@ public class EventManager : MonoBehaviour
         }
     }
 
-    void RemoveEvent(EVENT_TYPE eventType)
+    public void RemoveEvent(EVENT_TYPE eventType)
     {
         Listeners.Remove(eventType);
     }

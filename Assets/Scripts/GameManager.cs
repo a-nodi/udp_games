@@ -5,12 +5,12 @@ using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour, IListener
 {
-    private Dictionary<string, gameObject> dictOfOasis = new Dictionary<string, gameObject>();
+    private Dictionary<string, GameObject> dictOfOasis = new Dictionary<string, GameObject>();
 
     private string closestOasisId = null;
 
     // TODO: Def priority queue (min heap) for closestOasisId
-    public MinHeap<idDistancePair> priorityQueue = new MinHeap<idDistancePair>();
+    public MinHeap<IdDistancePair> priorityQueue = new MinHeap<IdDistancePair>();
     private int distanceCoefficient = 10; // TODO: Hyperparameter
 
     public float speed = 0.0f;
@@ -29,7 +29,10 @@ public class GameManager : MonoBehaviour, IListener
             }
             return _instance;
         }
-        private set;
+        private set
+        {
+            _instance = value;
+        }
     }
     private static GameManager _instance = null;
 
@@ -50,7 +53,7 @@ public class GameManager : MonoBehaviour, IListener
         GameObject newOasis = Instantiate(OasisPrefab, position, Quaternion.identity);
         dictOfOasis.Add(newOasis.GetComponent<Oasis>().id, newOasis);
 
-        priorityQueue.Add(new idDistancePair(newOasis.GetComponent<Oasis>().id, newOasis.GetComponent<Oasis>().transform.position.x));
+        priorityQueue.Add(new IdDistancePair(newOasis.GetComponent<Oasis>().id, newOasis.GetComponent<Oasis>().transform.position.x));
         closestOasisId = priorityQueue.Peek().Id;
     }
 
@@ -71,16 +74,16 @@ public class GameManager : MonoBehaviour, IListener
                 if (sender is Oasis)
                 {
                     EventManager.instance.PostNotification(
-                        eventType.MOVE_OASIS,
+                        EVENT_TYPE.MOVE_OASIS,
                         dictOfOasis[((Oasis)sender).id].GetComponent<Oasis>(),
-                        GenerateRandomDistance());
+                        GenerateRandomDistance(speed));
                 }
                 break;
         }
     }
     public void MoveOasis(string id, float distance)
     {
-        idDistancePair pair = priorityQueue.Peek();
+        IdDistancePair pair = priorityQueue.Peek();
 
         if (dictOfOasis.ContainsKey(id))
         {
@@ -97,14 +100,14 @@ public class GameManager : MonoBehaviour, IListener
             Debug.LogError("Oasis with id " + id + " not found");
         }
 
-        priorityQueue.Pop();
-        priorityQueue.Add(new idDistancePair(id, dictOfOasis[id].GetComponent<Oasis>().transform.position.x + distance));
+        priorityQueue.RemoveMin();
+        priorityQueue.Add(new IdDistancePair(id, dictOfOasis[id].GetComponent<Oasis>().transform.position.x + distance));
 
     }
 
     public float GenerateRandomDistance(float _speed)
     {
-        int randomDistance = Random.Range(0.0f, 1.0f) * _speed * distanceCoefficient;
+        float randomDistance = Random.Range(0.0f, 1.0f) * _speed * distanceCoefficient;
         return randomDistance < MIN_DISTANCE ? MIN_DISTANCE : randomDistance;
     }
 }
