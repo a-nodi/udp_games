@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class CameraManager : MonoBehaviour
 {
-    public float cameraSpeed = 2.0f; // 카메라의 이동 속도
 
     public CharacterStateManager characterStateMnager; // CharacterStateMnager 참조
+    public float cameraSpeed = 2.0f; // 카메라의 이동 속도
 
     void Start()
     {

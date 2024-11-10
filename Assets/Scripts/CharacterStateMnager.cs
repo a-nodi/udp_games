@@ -68,6 +68,7 @@ public class CharacterStateManager : MonoBehaviour
         return false; // 상태가 변경되지 않음
     }
 
+    private float startedOn=Time.time;
     void Start()
     {
         transform.localScale = new Vector3(1, 1, 1); // 캐릭터 크기 설정
@@ -75,6 +76,7 @@ public class CharacterStateManager : MonoBehaviour
         setState(States.Walking); // 기본 상태는 Walking
 
         animator = transform.GetComponent<Animator>();
+        startedOn=Time.time;
     }
     // public bool find = false;//debug
     // public bool near = false;//debug
@@ -83,8 +85,8 @@ public class CharacterStateManager : MonoBehaviour
         // debug animation
         // if(state==States.Walking && find) setState(States.Found);
         // if(state==States.Running&&!find) setState(States.Walking);
-        // if(state==States.Running&&near) setState(States.Jumping);
-
+        // if(state==States.Running&&near)   setState(States.Jumping);
+        
 
         switch (state)
         {
@@ -112,7 +114,7 @@ public class CharacterStateManager : MonoBehaviour
                 }
                 break;
         }
-
+        CharacterSpeed*=(Time.time-startedOn+5000)/5000;
         transform.position += Vector3.right * CharacterSpeed * Time.deltaTime;
     }
 

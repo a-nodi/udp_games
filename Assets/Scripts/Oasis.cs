@@ -12,7 +12,8 @@ public class Oasis : MonoBehaviour, IListener
 
     void OnMouseDown()
     {
-        EventManager.instance.PostNotification(EVENT_TYPE.CLICK_OASIS, this, transform.position.x);
+        //EventManager.instance.PostNotification(EVENT_TYPE.CLICK_OASIS, this, transform.position.x);
+        Debug.Log("aaa");
     }
 
     public void OnEvent(EVENT_TYPE eventType, Component sender, object param = null)
@@ -20,7 +21,7 @@ public class Oasis : MonoBehaviour, IListener
         switch (eventType)
         {
             case EVENT_TYPE.MOVE_OASIS:
-                if (sender == this)
+                if (sender != this)
                 {
                     // param is the new distance
                     Vector3 pos = transform.position;
