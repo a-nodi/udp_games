@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour, IListener
     private string closestOasisId = null;
 
     // TODO: Def priority queue (min heap) for closestOasisId
-
+    public MinHeap<idDistancePair> priorityQueue = new MinHeap<idDistancePair>();
     private int distanceCoefficient = 10; // TODO: Hyperparameter
 
     public float speed = 0.0f;
@@ -46,14 +46,8 @@ public class GameManager : MonoBehaviour, IListener
         GameObject newOasis = Instantiate(OasisPrefab, position, Quaternion.identity);
         dictOfOasis.Add(newOasis.GetComponent<Oasis>().id, newOasis);
 
-        if (closestOasisId == null)
-        {
-            closestOasisId = newOasis.GetComponent<Oasis>().id;
-        }
-        else if (dictOfOasis[closestOasisId].transform.position.x > newOasis.transform.position.x)
-        {
-            closestOasisId = newOasis.GetComponent<Oasis>().id;
-        }
+        priorityQueue.Add(new idDistancePair(newOasis.GetComponent<Oasis>().id, newOasis.GetComponent<Oasis>().transform.position.x));
+        closestOasisId = priorityQueue.Peek().Id;
     }
 
     public void RemoveOasis(string id)
@@ -82,8 +76,16 @@ public class GameManager : MonoBehaviour, IListener
     }
     public void MoveOasis(string id, float distance)
     {
+        idDistancePair pair = priorityQueue.Peek();
+
         if (dictOfOasis.ContainsKey(id))
         {
+            if (pair.Id != id)
+            {
+                Debug.LogError("Oasis with id " + id + " is not the closest oasis");
+                return;
+            }
+
             EventManager.instance.PostNotification(EVENT_TYPE.MOVE_OASIS, dictOfOasis[id].GetComponent<Oasis>(), distance);
         }
         else
@@ -91,7 +93,8 @@ public class GameManager : MonoBehaviour, IListener
             Debug.LogError("Oasis with id " + id + " not found");
         }
 
-        // TODO: Pop id from priority queue and reinsert with new distance
+        priorityQueue.Pop();
+        priorityQueue.Add(new idDistancePair(id, dictOfOasis[id].GetComponent<Oasis>().transform.position.x + distance));
 
     }
 
