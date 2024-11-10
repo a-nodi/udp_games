@@ -17,13 +17,13 @@ public class GameManager : MonoBehaviour, IListener
         }
     }
 
-    private int score = 0.0f;
+    private float score = 0.0f;
 
     // TODO: Def priority queue (min heap) for closestOasisId
     public MinHeap<IdDistancePair> priorityQueue = new MinHeap<IdDistancePair>();
     private int distanceCoefficient = 10; // TODO: Hyperparameter
 
-    public chracterStateManager characterStateManager;
+    public CharacterStateManager characterStateManager;
 
     public float speed = 0.0f;
 
@@ -31,6 +31,9 @@ public class GameManager : MonoBehaviour, IListener
 
     public float FOUND_DISTANCE = 6.0f;
 
+    float foundTime = 0.0f;
+    float crashTime = 0.0f;
+    float targetOasisX = 0.0f;
     public GameObject OasisPrefab;
 
     public static GameManager instance
@@ -66,16 +69,56 @@ public class GameManager : MonoBehaviour, IListener
     {
 
         float closestOasisX = dictOfOasis[closestOasisId].GetComponent<Oasis>().transform.position.x;
-        float characterX = characterStateManager.instance.transform.position.x;
+        float characterX = characterStateManager.transform.position.x;
 
-        if (closestOasisX - characterX <= characterStateManager.instance.JUMP_LENGTH)
+        switch (characterStateManager.getState())
         {
-            EventManager.instance.PostNotification(EVENT_TYPE.ADD_OASIS, this);
-        }
+            case CharacterStateManager.States.Walking:
+                if (closestOasisX - characterX < FOUND_DISTANCE)
+                {
+                    characterStateManager.setState(CharacterStateManager.States.Found);
+                    foundTime = Time.time;
+                }
+                break;
+            case CharacterStateManager.States.Found:
+                if (closestOasisX - characterX > FOUND_DISTANCE)
+                {
+                    characterStateManager.setState(CharacterStateManager.States.Walking);
+                }
+                if (Time.time - foundTime > 1.0f)
+                {
+                    characterStateManager.setState(CharacterStateManager.States.Running);
+                }
+                break;
+            case CharacterStateManager.States.Running:
+                if (closestOasisX - characterX < characterStateManager.JUMP_LENGTH)
+                {
+                    characterStateManager.setState(CharacterStateManager.States.Jumping);
+                    targetOasisX = closestOasisX;
+                }
+                if (closestOasisX - characterX > FOUND_DISTANCE)
+                {
+                    characterStateManager.setState(CharacterStateManager.States.Walking);
+                }
+                break;
+            case CharacterStateManager.States.Jumping:
+                if (closestOasisX - characterX < 0.01)
+                {
+                    EventManager.instance.PostNotification(EVENT_TYPE.GAME_OVER, this);
+                }
+                if (!(-0.01 < targetOasisX - closestOasisX && targetOasisX - closestOasisX < 0.01))
+                {
+                    characterStateManager.setState(CharacterStateManager.States.Crash);
+                    crashTime = Time.time;
+                }
+                break;
 
-        if (closestOasisX - characterX <= FOUND_DISTANCE)
-        {
-            EventManager.instance.PostNotification(EVENT_TYPE.FOUND, this, closestOasisId);
+            case CharacterStateManager.States.Crash:
+                if (Time.time - crashTime > 1.0f)
+                {
+                    characterStateManager.setState(CharacterStateManager.States.Walking);
+                }
+                break;
         }
     }
 
@@ -142,7 +185,6 @@ public class GameManager : MonoBehaviour, IListener
 
         priorityQueue.RemoveMin();
         priorityQueue.Add(new IdDistancePair(id, dictOfOasis[id].GetComponent<Oasis>().transform.position.x + distance));
-
     }
 
     public float GenerateRandomDistance(float _speed)
