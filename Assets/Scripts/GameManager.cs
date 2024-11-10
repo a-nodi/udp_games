@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour, IListener
         }
     }
 
-    private score = 0.0f;
+    private float score = 0.0f;
 
     // TODO: Def priority queue (min heap) for closestOasisId
     public MinHeap<IdDistancePair> priorityQueue = new MinHeap<IdDistancePair>();
