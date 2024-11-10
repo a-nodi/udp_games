@@ -9,6 +9,10 @@ public enum EVENT_TYPE
     FOUND,
     JUMP,
 
+    // Object Events
+    MOVE_OASIS,
+    CLICK_OASIS,
+
     // Game Events
     GET_SCORE,
     GAME_START,

@@ -5,9 +5,7 @@ public class EventManager : MonoBehaviour
 {
     public static EventManager instance { get; private set; }
     private static EventManager _instance = null;
-
     private Dictionary<EVENT_TYPE, List<IListener>> Listeners = new Dictionary<EVENT_TYPE, List<IListener>>();
-
 
     void Awake()
     {
