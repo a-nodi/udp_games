@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour, IListener
     public MinHeap<IdDistancePair> priorityQueue = new MinHeap<IdDistancePair>();
     private int distanceCoefficient = 10; // TODO: Hyperparameter
 
-    public CharacterStateManager characterStateManager;
+    public CharacterStateManager characterStateManager = null;
 
     public float speed = 0.0f;
 
@@ -68,6 +68,10 @@ public class GameManager : MonoBehaviour, IListener
     void Update()
     {
 
+        if (characterStateManager == null)
+        {
+            return;
+        }
         float closestOasisX = dictOfOasis[closestOasisId].GetComponent<Oasis>().transform.position.x;
         float characterX = characterStateManager.transform.position.x;
 
