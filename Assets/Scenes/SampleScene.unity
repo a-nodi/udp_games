@@ -408,6 +408,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d97fe3df880e344eabcdaa2e8771060, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  WALKING_SPEED: 2
+  RUNNING_SPEED: 10
+  WAIT_TIME: 1
+  CharacterSpeed: 2
+  find: 0
+  near: 0
 --- !u!212 &910004120
 SpriteRenderer:
   m_ObjectHideFlags: 0
