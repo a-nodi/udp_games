@@ -9,6 +9,16 @@ public class GameManager : MonoBehaviour, IListener
 
     private string closestOasisId = null;
 
+    public string ClosestOasisId
+    {
+        get
+        {
+            return closestOasisId;
+        }
+    }
+
+    private score = 0.0f;
+
     // TODO: Def priority queue (min heap) for closestOasisId
     public MinHeap<IdDistancePair> priorityQueue = new MinHeap<IdDistancePair>();
     private int distanceCoefficient = 10; // TODO: Hyperparameter
@@ -73,10 +83,19 @@ public class GameManager : MonoBehaviour, IListener
             case EVENT_TYPE.CLICK_OASIS:
                 if (sender is Oasis)
                 {
+                    AcumulateScore(((Oasis)sender).id);
+
                     EventManager.instance.PostNotification(
                         EVENT_TYPE.MOVE_OASIS,
                         dictOfOasis[((Oasis)sender).id].GetComponent<Oasis>(),
-                        GenerateRandomDistance(speed));
+                        GenerateRandomDistance(speed)
+                    );
+
+                    EventManager.instance.PostNotification(
+                        EVENT_TYPE.UPDATE_SCORE,
+                        this,
+                        score
+                    );
                 }
                 break;
         }
@@ -109,5 +128,33 @@ public class GameManager : MonoBehaviour, IListener
     {
         float randomDistance = Random.Range(0.0f, 1.0f) * _speed * distanceCoefficient;
         return randomDistance < MIN_DISTANCE ? MIN_DISTANCE : randomDistance;
+    }
+
+    public float scoreFuntion(float distance)
+    {
+        if (distance < 0)
+        {
+            return 0.0f;
+        }
+
+        else if (distance < 0.1)
+        {
+            return 100.0f;
+        }
+
+        else if (distance < 10)
+        {
+            return 10.0f / distance;
+        }
+
+        else
+        {
+            return 0.0f;
+        }
+    }
+
+    void AcumulateScore(string id)
+    {
+        score += scoreFuntion(dictOfOasis[id].GetComponent<Oasis>().transform.position.x);
     }
 }
