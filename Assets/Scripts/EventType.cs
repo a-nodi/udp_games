@@ -2,12 +2,6 @@ using UnityEngine;
 
 public enum EVENT_TYPE
 {
-    // Animation Events
-    WALK,
-    RUN,
-    FALL,
-    FOUND,
-    JUMP,
 
     // Object Events
     MOVE_OASIS,
