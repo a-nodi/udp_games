@@ -11,7 +11,6 @@ public class Oasis : MonoBehaviour, IListener
 
     void OnMouseDown()
     {
-        // TODO: Should be processed in GameManager
         EventManager.instance.PostNotification(EVENT_TYPE.CLICK_OASIS, this, this.transform.position.x);
     }
 
