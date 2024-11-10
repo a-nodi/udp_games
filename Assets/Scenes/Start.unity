@@ -326,6 +326,55 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 290353526}
   m_CullTransparentMesh: 1
+--- !u!1 &440029878
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 440029880}
+  - component: {fileID: 440029879}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &440029879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 440029878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae25387de73c4264b9d5fdd3af11b972, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterStateManager: {fileID: 0}
+  speed: 0
+  MIN_DISTANCE: 5
+  FOUND_DISTANCE: 6
+  OasisPrefab: {fileID: 7111821348471306287, guid: 78caaf7278e59be45aca770813344fe1, type: 3}
+--- !u!4 &440029880
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 440029878}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.3804946, y: 2.2118585, z: -0.119445056}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &714906201
 GameObject:
   m_ObjectHideFlags: 0
@@ -1108,3 +1157,4 @@ SceneRoots:
   - {fileID: 785080331}
   - {fileID: 8127816}
   - {fileID: 1281618783}
+  - {fileID: 440029880}
