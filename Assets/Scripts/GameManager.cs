@@ -36,6 +36,8 @@ public class GameManager : MonoBehaviour, IListener
     float targetOasisX = 0.0f;
     public GameObject OasisPrefab;
 
+    public bool isAddedOasis = false;
+
     private int currentSceneIndex;
 
     public static GameManager instance
@@ -97,6 +99,15 @@ public class GameManager : MonoBehaviour, IListener
         float closestOasisX = dictOfOasis[closestOasisId].GetComponent<Oasis>().transform.position.x;
         float characterX = characterStateManager.transform.position.x;
 
+        if (!isAddedOasis)
+        {
+            isAddedOasis = true;
+            for (int i = 0; i < 5; i++)
+            {
+                AddOasis(new Vector2(i * 10, 0));
+            }
+        }
+
         switch (characterStateManager.getState())
         {
             case CharacterStateManager.States.Walking:
@@ -155,6 +166,8 @@ public class GameManager : MonoBehaviour, IListener
 
         priorityQueue.Add(new IdDistancePair(newOasis.GetComponent<Oasis>().id, newOasis.GetComponent<Oasis>().transform.position.x));
         closestOasisId = priorityQueue.Peek().Id;
+
+        EventManager.instance.AddListener(EVENT_TYPE.CLICK_OASIS, newOasis.GetComponent<Oasis>());
     }
 
     public void RemoveOasis(string id)
@@ -163,6 +176,7 @@ public class GameManager : MonoBehaviour, IListener
         {
             Destroy(dictOfOasis[id]);
             dictOfOasis.Remove(id);
+            EventManager.instance.RemoveListener(EVENT_TYPE.CLICK_OASIS, dictOfOasis[id].GetComponent<Oasis>());
         }
     }
 
