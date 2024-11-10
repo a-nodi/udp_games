@@ -3,7 +3,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class CharacterStateMnager : MonoBehaviour
+public class CharacterStateManager : MonoBehaviour
 {
     public enum States
     {

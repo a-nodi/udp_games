@@ -4,13 +4,13 @@ public class CameraManager : MonoBehaviour
 {
     public float cameraSpeed = 2.0f; // 카메라의 이동 속도
 
-    public CharacterStateMnager characterStateMnager; // CharacterStateMnager 참조
+    public CharacterStateManager characterStateMnager; // CharacterStateMnager 참조
 
     void Start()
     {
         // 배경의 초기 위치 저장
         transform.position = new Vector3(0, 0, -1000); // 초기 카메라 위치
-        characterStateMnager = FindObjectOfType<CharacterStateMnager>();
+        characterStateMnager = FindObjectOfType<CharacterStateManager>();
 
     }
 

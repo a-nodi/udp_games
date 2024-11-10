@@ -3,7 +3,7 @@ using UnityEngine;
 public class OasisManager : MonoBehaviour
 {
     public GameObject character; // 캐릭터 오브젝트 참조
-    private CharacterStateMnager characterStateManager; // 캐릭터 상태 관리자
+    private CharacterStateManager characterStateManager; // 캐릭터 상태 관리자
     private GameObject oasis1, oasis2, oasis3;
 
     public float FoundDistance = 30f; // 감지 거리
@@ -17,7 +17,7 @@ public class OasisManager : MonoBehaviour
         oasis3 = GameObject.FindWithTag("Oasis3");
 
         // 캐릭터 상태 관리자 참조
-        characterStateManager = character.GetComponent<CharacterStateMnager>();
+        characterStateManager = character.GetComponent<CharacterStateManager>();
 
         // 오아시스 초기 위치 설정
         transform.position = new Vector3(Random.Range(100, 200), -1, -5);
@@ -50,12 +50,12 @@ public class OasisManager : MonoBehaviour
         if (distance <= 1f && oasis.transform.position.x < character.transform.position.x)
         {
             RandomizeOasis(oasis);
-            characterStateManager.setState(CharacterStateMnager.States.Walking);
+            characterStateManager.setState(CharacterStateManager.States.Walking);
         }
-        else if (distance < FoundDistance && characterStateManager.getState() != CharacterStateMnager.States.Running)
+        else if (distance < FoundDistance && characterStateManager.getState() != CharacterStateManager.States.Running)
         {
             // 감지 거리 내에 있을 때 Running 상태로 전환
-            characterStateManager.setState(CharacterStateMnager.States.Running);
+            characterStateManager.setState(CharacterStateManager.States.Running);
         }
 
         // 음수 좌표일 경우 100 이상 양수 좌표로 강제 이동
